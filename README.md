@@ -7,6 +7,7 @@ Take-home assignment for CityScout AI Engineer internship.
 ```bash
 npm install
 cp .env.example .env
+# open .env and add your GitHub token (needs Models read permission)
 ```
 
 ## Running
@@ -26,10 +27,12 @@ Unmapped statuses — if a status value doesn't match any of the known mappings 
 
 Project types — same approach but slightly different: unmapped types keep their original value instead of going to `null`. A type we don't recognize is still useful, a status we don't recognize isn't.
 
-What I'd improve with more time — the project type fallback could use an LLM call to normalize types that don't match any category (e.g. "Accessory Structure", "Change of Use"). Right now those just pass through as-is.
+## What I'd improve
+
+The project type fallback could use an LLM call to normalize types that don't match any category (things like "Accessory Structure" or "Change of Use" just pass through as-is right now). I'd also add better logging around which records got merged and why, mostly just to make it easier to spot issues in the output.
 
 ## AI tools & process
 
-Used Claude to help write the field normalization boilerplate, date parsing regexes, and the status/type lookup tables.
+Used Claude for the field normalization boilerplate and the status/type lookup tables — mostly just to move faster on the repetitive parts. The actual extraction in `extract.js` uses GPT-4o via GitHub Models. Iterated on the prompt a bit to get consistent output — the main thing was being explicit about when to use null vs make a judgment call on ambiguous roles, and making sure it returned a raw JSON array without any surrounding text.
 
-The trickier decisions I worked out myself. For dedup I had to decide what "most complete" actually means in practice and how to handle conflicts when both records have a value for the same field. I also decided whether to null out unmapped project types the same way I did for statuses. I kept the original value instead since knowing a project is some type we haven't seen before is still useful, whereas an unrecognized status doesn't mean much without context. Also renamed x_coord and y_coord fields from RES permits to latitude and longitude for clarity.
+The parts I had to work out myself: the dedup merge strategy, deciding what "most complete" actually means when two records conflict, and whether to null out unmapped project types the same way I did for statuses. That last one isn't obvious from the spec — keeping the original value felt more useful than losing the information entirely.

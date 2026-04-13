@@ -7,7 +7,6 @@ Take-home assignment for CityScout AI Engineer internship.
 ```bash
 npm install
 cp .env.example .env
-# add your Anthropic API key to .env
 ```
 
 ## Running
@@ -26,8 +25,6 @@ Deduplication — records with the same normalized address are merged. The most 
 Unmapped statuses — if a status value doesn't match any of the known mappings it gets set to `null` rather than guessing. The original value is still in `raw_data` so nothing is lost.
 
 Project types — same approach but slightly different: unmapped types keep their original value instead of going to `null`. A type we don't recognize is still useful, a status we don't recognize isn't.
-
-`x_coord`/`y_coord` — some RES permits store coordinates under these keys instead of `lat`/`lng`. Based on the values in the data they're clearly lat/lng so I mapped them directly. Worth flagging as an assumption.
 
 What I'd improve with more time — the project type fallback could use an LLM call to normalize types that don't match any category (e.g. "Accessory Structure", "Change of Use"). Right now those just pass through as-is.
 

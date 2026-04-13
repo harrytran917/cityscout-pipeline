@@ -190,8 +190,9 @@ function deduplicate(records) {
   const out = [];
   for (const group of groups.values()) {
     if (group.length === 1) { out.push(group[0]); continue; }
-    // sort most-complete first, then merge remainder into it
-    group.sort((a, b) => countFields(b) - countFields(a));
+    // pre-compute field counts so we're not calling countFields repeatedly during sort
+    const counts = new Map(group.map(r => [r, countFields(r)]));
+    group.sort((a, b) => counts.get(b) - counts.get(a));
     let merged = group[0];
     for (let i = 1; i < group.length; i++) merged = mergeTwo(merged, group[i]);
     out.push(merged);
@@ -203,8 +204,10 @@ const raw = JSON.parse(
   fs.readFileSync(path.join(__dirname, 'raw-permits.json'), 'utf8')
 );
 
-const records = raw.map(r => ({
-  proposal_number:  getId(r) != null ? String(getId(r)) : null,
+const records = raw.map(r => {
+  const id = getId(r);
+  return {
+  proposal_number:  id != null ? String(id) : null,
   name:             getName(r),
   address:          getAddress(r),
   description:      getDescription(r),
@@ -218,7 +221,8 @@ const records = raw.map(r => ({
   longitude:        getLng(r),
   source_url:       getUrl(r),
   raw_data:         r,
-}));
+  };
+});
 
 // filter out anything with no id, or no name AND no address (basically empty records)
 const filtered = records.filter(r => r.proposal_number && (r.name || r.address));

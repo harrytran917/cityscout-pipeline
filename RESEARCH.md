@@ -15,7 +15,7 @@ https://data.austintexas.gov
 
 -Platform identification: Socrata-based. Visible from the standard Socrata UI and `/resource/` API path structure.
 -Data available: Building permits dataset with ~250k records going back to 2015.
--Access method: Has a real API. `GET https://data.austintexas.gov/resource/3syk-w9eu.json`. No key needed but has rate limits otherwise. Supports filtering and pagination. Easiest path for bulk permit data.
+-Access method: Has a real API. `GET https://data.austintexas.gov/resource/3syk-w9eu.json`. No key needed but rate-limited to 1000 req/hour unauthenticated. Supports SoQL filtering and pagination — `$where=date_issued > '2024-01-01'` and `$select` make incremental syncs straightforward. Easiest path for bulk permit data.
 -Attachments: N/A, data only.
 -Estimated volume: ~75-100k building permits from 2020 to present.
 -Limitations & gotchas: Nightly batch export so it's a day or two behind. Planning cases are not included. Some older records only have a parcel ID with no street address. Field names don't always match what ABC shows in the UI.

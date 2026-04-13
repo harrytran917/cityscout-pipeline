@@ -125,7 +125,7 @@
         "license_state": "TN"
       },
       {
-        "name": "Tommy Barnwell",
+        "name": "Tommy Barnwell, Project Director",
         "role": "Contractor",
         "firm": "Brasfield & Gorrie LLC",
         "phone": "(615) 665-0500",
@@ -138,6 +138,15 @@
   {
     "document_id": "doc_3",
     "professionals": [
+      {
+        "name": "Michelle Torres, AICP",
+        "role": "Other",
+        "firm": "Nashville-Davidson County Planning Department",
+        "phone": null,
+        "email": null,
+        "license_number": null,
+        "license_state": null
+      },
       {
         "name": "Jason Adkins",
         "role": "Attorney",
@@ -167,6 +176,15 @@
       },
       {
         "name": "Angela Wright, PLA",
+        "role": "Landscape Architect",
+        "firm": "Lose Design",
+        "phone": null,
+        "email": null,
+        "license_number": null,
+        "license_state": null
+      },
+      {
+        "name": "Tom Loss",
         "role": "Landscape Architect",
         "firm": "Lose Design",
         "phone": null,

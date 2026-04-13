@@ -110,7 +110,7 @@ const STATUS_MAP = {
 
 function mapStatus(raw) {
   if (!raw) return null;
-  const lower = raw.toLowerCase().trim();
+  const lower = raw.toLowerCase().trim().replace(/\.+$/, '');
   for (const [normalized, values] of Object.entries(STATUS_MAP)) {
     if (values.includes(lower)) return normalized;
   }
@@ -130,7 +130,7 @@ const TYPE_MAP = {
 
 function mapType(raw) {
   if (!raw) return null;
-  const lower = raw.toLowerCase().trim();
+  const lower = raw.toLowerCase().trim().replace(/\.+$/, '');
   for (const [normalized, values] of Object.entries(TYPE_MAP)) {
     if (values.includes(lower)) return normalized;
   }
@@ -172,6 +172,7 @@ function mergeTwo(primary, secondary) {
     if (result[k] === null || result[k] === undefined) {
       result[k] = v;
     } else if (v !== null && v !== undefined && !primaryIsNewer) {
+      // only overwrite when both have a value — don't let a null from the newer record win
       result[k] = v;
     }
   }
@@ -224,7 +225,8 @@ const records = raw.map(r => {
   };
 });
 
-// filter out anything with no id, or no name AND no address (basically empty records)
+// spec requires name OR address; we also require proposal_number since it's a required schema field
+// records missing an id are untrackable and not worth keeping
 const filtered = records.filter(r => r.proposal_number && (r.name || r.address));
 
 const dropped = raw.length - filtered.length;
